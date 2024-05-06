@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>ZipInfo</h1>
+    <h1>ZipInfo Belgium</h1>
     <div class="container">
       <ZipSearch v-on:get-zip="getZipInfo"/>
       <ZipInfo v-if="info" v-bind:info="info"/>

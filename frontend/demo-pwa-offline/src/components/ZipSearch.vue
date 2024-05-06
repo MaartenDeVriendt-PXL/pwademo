@@ -1,57 +1,54 @@
 <template>
-    <ion-grid>
-        <form @submit="onSubmit">
-            <ion-col>
-                <ion-item>
-                    <ion-label>ZipCode:</ion-label>
-                    <ion-input :value="zip" @input="zip = $event.target.value" placeholder="Enter Zipcode" name="zip"></ion-input>
-                </ion-item>
-            </ion-col>
-            <ion-col>
-                <ion-button type="submit" color="primary" expand="block">Find</ion-button>
-            </ion-col>
-        </form>
-    </ion-grid>
+  <div>
+    <form @submit.prevent="onSubmit">
+      <label for="zip">ZipCode:</label>
+      <input type="text" v-model="zip" placeholder="Enter Zipcode" name="zip" id="zip">
+      <button type="submit" class="button">Find</button>
+    </form>
+  </div>
 </template>
 
 <script>
-
-import { alertController } from '@ionic/vue';
-
 export default {
-    name: "ZipSearch",
-    data(){
-        return{
-            zip: ""
-        }
+  name: "ZipSearch",
+  data() {
+    return {
+      zip: ""
+    };
+  },
+  methods: {
+    onSubmit() {
+      const isValidZip = /(^\d{4}$)|(^\d{4}-\d{3}$)/.test(this.zip);
+      if (!isValidZip) {
+        this.showAlert();
+        this.zip = '';
+      } else {
+        this.$emit("get-zip", this.zip);
+        this.zip = '';
+      }
     },
-    methods:{
-        onSubmit(event){
-            event.preventDefault();
-            //const isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(this.zip);
-            const isValidZip = /(^\d{4}$)|(^\d{4}-\d{3}$)/.test(this.zip);
-            //console.log(isValidZip);
-            if(!isValidZip){
-                this.showAlert();
-                this.zip = '';
-            }else{
-                this.$emit("get-zip", this.zip);
-                this.zip = '';
-            }
-        },
-        async showAlert() {
-            const alert = await alertController.create({
-                header: 'Enter Zipcode',
-                message: 'Please enter a valid Belgian zipcode',
-                buttons: ['OK']
-            });
-
-      await alert.present();
+    async showAlert() {
+      alert('Please enter a valid Belgian zipcode.');
     }
-    }
-}
+  }
+};
 </script>
 
-<style>
+<style scoped>
+.button {
+  width: 100%; /* Make button take the full width */
+  margin-top: 30px;
+  background-image: linear-gradient(to bottom right, #4e9af1, #2f76e4);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
+.button:hover {
+  background-color: #2f76e4;
+}
 </style>
